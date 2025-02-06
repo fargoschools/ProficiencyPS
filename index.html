@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scientific Writing Data</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            cursor: pointer;
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h2>Scientific Writing (SEP6 & SEP7) - Game: Energy</h2>
+    <table id="dataTable">
+        <thead>
+            <tr>
+                <th onclick="sortTable(0)">Teacher</th>
+                <th onclick="sortTable(1)">% Proficient</th>
+                <th onclick="sortTable(2)">4</th>
+                <th onclick="sortTable(3)">3</th>
+                <th onclick="sortTable(4)">2</th>
+                <th onclick="sortTable(5)">1</th>
+                <th onclick="sortTable(6)">N</th>
+                <th onclick="sortTable(7)">M</th>
+                <th onclick="sortTable(8)">Total Students</th>
+            </tr>
+        </thead>
+        <tbody>
+            <script>
+                const data = [
+                    ["Olson", 42.86, 0, 18, 17, 6, 1, 0, 42],
+                    ["Potter", 43.59, 0, 17, 17, 4, 1, 0, 39],
+                    ["Finley", 68.60, 0, 59, 13, 10, 4, 0, 86],
+                    ["Christenson", 61.76, 1, 20, 10, 2, 1, 0, 34],
+                    ["Walsh", 78.48, 2, 60, 12, 5, 0, 0, 79],
+                    ["Thomas", 68.18, 0, 15, 2, 5, 0, 0, 22],
+                    ["Triechel", 58.23, 0, 46, 23, 9, 1, 0, 79],
+                    ["Carney", 75.00, 0, 18, 4, 1, 1, 0, 24],
+                    ["Langlie", 86.96, 0, 80, 12, 0, 0, 0, 92],
+                    ["Johnson", 63.89, 1, 22, 11, 1, 1, 0, 36],
+                    ["Stuber", 68.18, 0, 30, 10, 3, 1, 0, 44]
+                ];
+                
+                let tableBody = "";
+                data.forEach(row => {
+                    tableBody += `<tr>${row.map(cell => `<td>${cell}</td>`).join('')}</tr>`;
+                });
+                document.write(tableBody);
+            </script>
+        </tbody>
+    </table>
+
+    <div id="chart"></div>
+
+    <script>
+        function sortTable(n) {
+            let table = document.getElementById("dataTable");
+            let rows = Array.from(table.rows).slice(1);
+            let sortedRows = rows.sort((a, b) => {
+                let x = a.cells[n].innerText;
+                let y = b.cells[n].innerText;
+                return isNaN(x - y) ? x.localeCompare(y) : x - y;
+            });
+            table.tBodies[0].append(...sortedRows);
+        }
+
+        let teachers = data.map(row => row[0]);
+        let proficiencies = data.map(row => row[1]);
+        
+        Plotly.newPlot("chart", [{
+            x: teachers,
+            y: proficiencies,
+            type: "bar",
+            marker: {color: "blue"}
+        }], {
+            title: "% Proficient by Teacher",
+            xaxis: { title: "Teacher" },
+            yaxis: { title: "% Proficient" }
+        });
+    </script>
+</body>
+</html>
+
