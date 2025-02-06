@@ -42,6 +42,46 @@
     
     <div id="summaryChart"></div>
     
+    <h3>Teacher Performance Data</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Teacher</th>
+                <th>% Proficient</th>
+                <th>4s</th>
+                <th>3s</th>
+                <th>2s</th>
+                <th>1s</th>
+                <th>Ns</th>
+                <th>Ms</th>
+                <th>Total Students</th>
+            </tr>
+        </thead>
+        <tbody>
+            <script>
+                const teachers = ["Olson", "Potter", "Finley", "Christenson", "Walsh", "Thomas", "Triechel", "Carney", "Langlie", "Johnson", "Stuber"];
+                const teacherData = [
+                    [42.86, 0, 18, 17, 6, 1, 0, 42],
+                    [43.59, 0, 17, 17, 4, 1, 0, 39],
+                    [68.60, 0, 59, 13, 10, 4, 0, 86],
+                    [61.76, 1, 20, 10, 2, 1, 0, 34],
+                    [78.48, 2, 60, 12, 5, 0, 0, 79],
+                    [68.18, 0, 15, 2, 5, 0, 0, 22],
+                    [58.23, 0, 46, 23, 9, 1, 0, 79],
+                    [75.00, 0, 18, 4, 1, 1, 0, 24],
+                    [86.96, 0, 80, 12, 0, 0, 0, 92],
+                    [63.89, 1, 22, 11, 1, 1, 0, 36],
+                    [68.18, 0, 30, 10, 3, 1, 0, 44]
+                ];
+                let tableBody = "";
+                teachers.forEach((teacher, index) => {
+                    tableBody += `<tr><td>${teacher}</td>${teacherData[index].map(value => `<td>${value}</td>`).join('')}</tr>`;
+                });
+                document.write(tableBody);
+            </script>
+        </tbody>
+    </table>
+    
     <h3>PLC Reflection</h3>
     <table>
         <tr><td>Which specific students demonstrated above proficiency on this assessment?</td><td><textarea></textarea></td></tr>
@@ -57,40 +97,6 @@
     <button onclick="saveReflection()">Save Reflection</button>
     
     <script>
-        const data = [
-            ["4s", 0], ["3s", 0], ["2s", 0], ["1s", 0], ["Ns", 0], ["Ms", 0]
-        ];
-        let totalStudents = 0;
-        const rawData = [
-            [0, 18, 17, 6, 1, 0, 42],
-            [0, 17, 17, 4, 1, 0, 39],
-            [0, 59, 13, 10, 4, 0, 86],
-            [1, 20, 10, 2, 1, 0, 34],
-            [2, 60, 12, 5, 0, 0, 79],
-            [0, 15, 2, 5, 0, 0, 22],
-            [0, 46, 23, 9, 1, 0, 79],
-            [0, 18, 4, 1, 1, 0, 24],
-            [0, 80, 12, 0, 0, 0, 92],
-            [1, 22, 11, 1, 1, 0, 36],
-            [0, 30, 10, 3, 1, 0, 44]
-        ];
-        rawData.forEach(row => {
-            for (let i = 0; i < 6; i++) {
-                data[i][1] += row[i];
-            }
-            totalStudents += row[6];
-        });
-        const percentages = data.map(d => (d[1] / totalStudents * 100).toFixed(2));
-        Plotly.newPlot("summaryChart", [{
-            x: ["4s", "3s", "2s", "1s", "Ns", "Ms"],
-            y: percentages,
-            type: "bar",
-            marker: {color: "red"}
-        }], {
-            title: "Total Percentage Distribution of Scores",
-            xaxis: { title: "Score Category" },
-            yaxis: { title: "Percentage (%)" }
-        });
         function changeTitle() {
             let newTitle = prompt("Enter new assessment name:", "Scientific Writing (SEP6 & SEP7) - Game: Energy");
             if (newTitle) {
@@ -103,3 +109,4 @@
     </script>
 </body>
 </html>
+
