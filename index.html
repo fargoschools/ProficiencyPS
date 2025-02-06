@@ -43,6 +43,22 @@
     
     <div id="summaryChart"></div>
     
+    <script>
+        const scoreCategories = ["4s", "3s", "2s", "1s", "Ns", "Ms"];
+        const totalScores = [3, 387, 151, 46, 11, 0]; // Summed data from teacher scores
+        
+        Plotly.newPlot("summaryChart", [{
+            x: scoreCategories,
+            y: totalScores,
+            type: "bar",
+            marker: {color: "blue"}
+        }], {
+            title: "Total Percentage Distribution of Scores",
+            xaxis: { title: "Score Category" },
+            yaxis: { title: "Total Count" }
+        });
+    </script>
+    
     <h3>Teacher Performance Data</h3>
     <table>
         <thead>
