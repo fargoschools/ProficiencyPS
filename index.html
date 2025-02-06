@@ -39,6 +39,7 @@
 <body>
     <h2 id="assessment-title">Scientific Writing (SEP6 & SEP7) - Game: Energy</h2>
     <button onclick="changeTitle()">Change Assessment Name</button>
+    <button onclick="addAssessment()">Add Assessment</button>
     
     <div id="summaryChart"></div>
     
@@ -103,10 +104,12 @@
                 document.getElementById("assessment-title").innerText = newTitle;
             }
         }
+        function addAssessment() {
+            alert("New assessment added!");
+        }
         function saveReflection() {
             alert("Reflection saved!");
         }
     </script>
 </body>
 </html>
-
