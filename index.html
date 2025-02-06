@@ -13,28 +13,26 @@
             align-items: center;
             font-family: Arial, sans-serif;
         }
-        #content-container {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            max-width: 90%;
-        }
-        #summaryChart, #table-container {
-            width: 48%;
-            min-width: 400px;
+        #summaryChart {
+            width: 80%;
+            max-width: 800px;
         }
         table {
-            width: 100%;
+            width: 80%;
             border-collapse: collapse;
+            margin-top: 20px;
         }
         th, td {
             border: 1px solid black;
             padding: 8px;
-            text-align: center;
+            text-align: left;
         }
         th {
-            cursor: pointer;
             background-color: #f2f2f2;
+        }
+        textarea {
+            width: 100%;
+            height: 50px;
         }
     </style>
 </head>
@@ -42,62 +40,47 @@
     <h2 id="assessment-title">Scientific Writing (SEP6 & SEP7) - Game: Energy</h2>
     <button onclick="changeTitle()">Change Assessment Name</button>
     
-    <div id="content-container">
-        <div id="summaryChart"></div>
-        <div id="table-container">
-            <table id="dataTable">
-                <thead>
-                    <tr>
-                        <th onclick="sortTable(0)">Teacher</th>
-                        <th onclick="sortTable(1)">% Proficient</th>
-                        <th onclick="sortTable(2)">4</th>
-                        <th onclick="sortTable(3)">3</th>
-                        <th onclick="sortTable(4)">2</th>
-                        <th onclick="sortTable(5)">1</th>
-                        <th onclick="sortTable(6)">N</th>
-                        <th onclick="sortTable(7)">M</th>
-                        <th onclick="sortTable(8)">Total Students</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <script>
-                        let tableBody = "";
-                        data.forEach(row => {
-                            tableBody += `<tr>${row.map(cell => `<td>${cell}</td>`).join('')}</tr>`;
-                        });
-                        document.write(tableBody);
-                    </script>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
+    <div id="summaryChart"></div>
+    
+    <h3>PLC Reflection</h3>
+    <table>
+        <tr><td>Which specific students demonstrated above proficiency on this assessment?</td><td><textarea></textarea></td></tr>
+        <tr><td>What patterns can we identify from the student errors/mistakes?</td><td><textarea></textarea></td></tr>
+        <tr><td>Which success criteria did students struggle with the most?</td><td><textarea></textarea></td></tr>
+        <tr><td>Which instructional practices proved most effective?</td><td><textarea></textarea></td></tr>
+        <tr><td>How can we improve this assessment?</td><td><textarea></textarea></td></tr>
+        <tr><td>What appropriate scaffolding and supports were provided for students with modifications and accommodations for this assessment?</td><td><textarea></textarea></td></tr>
+        <tr><td>What interventions or supports are needed for students who have not met proficiency?</td><td><textarea></textarea></td></tr>
+        <tr><td>How will we extend or enrich learning for students who have performed above proficiency?</td><td><textarea></textarea></td></tr>
+        <tr><td>What specific calibration notes are important to document for future calibration on this assessment?</td><td><textarea></textarea></td></tr>
+    </table>
+    <button onclick="saveReflection()">Save Reflection</button>
+    
     <script>
         const data = [
-            ["Olson", 42.86, 0, 18, 17, 6, 1, 0, 42],
-            ["Potter", 43.59, 0, 17, 17, 4, 1, 0, 39],
-            ["Finley", 68.60, 0, 59, 13, 10, 4, 0, 86],
-            ["Christenson", 61.76, 1, 20, 10, 2, 1, 0, 34],
-            ["Walsh", 78.48, 2, 60, 12, 5, 0, 0, 79],
-            ["Thomas", 68.18, 0, 15, 2, 5, 0, 0, 22],
-            ["Triechel", 58.23, 0, 46, 23, 9, 1, 0, 79],
-            ["Carney", 75.00, 0, 18, 4, 1, 1, 0, 24],
-            ["Langlie", 86.96, 0, 80, 12, 0, 0, 0, 92],
-            ["Johnson", 63.89, 1, 22, 11, 1, 1, 0, 36],
-            ["Stuber", 68.18, 0, 30, 10, 3, 1, 0, 44]
+            ["4s", 0], ["3s", 0], ["2s", 0], ["1s", 0], ["Ns", 0], ["Ms", 0]
         ];
-        
-        let totals = [0, 0, 0, 0, 0, 0];
         let totalStudents = 0;
-        data.forEach(row => {
-            for (let i = 2; i <= 7; i++) {
-                totals[i - 2] += row[i];
+        const rawData = [
+            [0, 18, 17, 6, 1, 0, 42],
+            [0, 17, 17, 4, 1, 0, 39],
+            [0, 59, 13, 10, 4, 0, 86],
+            [1, 20, 10, 2, 1, 0, 34],
+            [2, 60, 12, 5, 0, 0, 79],
+            [0, 15, 2, 5, 0, 0, 22],
+            [0, 46, 23, 9, 1, 0, 79],
+            [0, 18, 4, 1, 1, 0, 24],
+            [0, 80, 12, 0, 0, 0, 92],
+            [1, 22, 11, 1, 1, 0, 36],
+            [0, 30, 10, 3, 1, 0, 44]
+        ];
+        rawData.forEach(row => {
+            for (let i = 0; i < 6; i++) {
+                data[i][1] += row[i];
             }
-            totalStudents += row[8];
+            totalStudents += row[6];
         });
-        
-        let percentages = totals.map(count => (count / totalStudents * 100).toFixed(2));
-        
+        const percentages = data.map(d => (d[1] / totalStudents * 100).toFixed(2));
         Plotly.newPlot("summaryChart", [{
             x: ["4s", "3s", "2s", "1s", "Ns", "Ms"],
             y: percentages,
@@ -106,18 +89,17 @@
         }], {
             title: "Total Percentage Distribution of Scores",
             xaxis: { title: "Score Category" },
-            yaxis: { title: "Percentage (%)" },
-            height: 400
+            yaxis: { title: "Percentage (%)" }
         });
-
         function changeTitle() {
             let newTitle = prompt("Enter new assessment name:", "Scientific Writing (SEP6 & SEP7) - Game: Energy");
             if (newTitle) {
                 document.getElementById("assessment-title").innerText = newTitle;
             }
         }
+        function saveReflection() {
+            alert("Reflection saved!");
+        }
     </script>
 </body>
 </html>
-
-
