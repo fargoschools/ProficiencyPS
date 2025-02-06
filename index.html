@@ -7,6 +7,22 @@
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+        #content-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            max-width: 90%;
+        }
+        #summaryChart, #table-container {
+            width: 48%;
+            min-width: 400px;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -23,10 +39,39 @@
     </style>
 </head>
 <body>
-    <h2>Scientific Writing (SEP6 & SEP7) - Game: Energy</h2>
+    <h2 id="assessment-title">Scientific Writing (SEP6 & SEP7) - Game: Energy</h2>
+    <button onclick="changeTitle()">Change Assessment Name</button>
     
-    <div id="summaryChart"></div>
-    
+    <div id="content-container">
+        <div id="summaryChart"></div>
+        <div id="table-container">
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">Teacher</th>
+                        <th onclick="sortTable(1)">% Proficient</th>
+                        <th onclick="sortTable(2)">4</th>
+                        <th onclick="sortTable(3)">3</th>
+                        <th onclick="sortTable(4)">2</th>
+                        <th onclick="sortTable(5)">1</th>
+                        <th onclick="sortTable(6)">N</th>
+                        <th onclick="sortTable(7)">M</th>
+                        <th onclick="sortTable(8)">Total Students</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <script>
+                        let tableBody = "";
+                        data.forEach(row => {
+                            tableBody += `<tr>${row.map(cell => `<td>${cell}</td>`).join('')}</tr>`;
+                        });
+                        document.write(tableBody);
+                    </script>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
     <script>
         const data = [
             ["Olson", 42.86, 0, 18, 17, 6, 1, 0, 42],
@@ -61,34 +106,18 @@
         }], {
             title: "Total Percentage Distribution of Scores",
             xaxis: { title: "Score Category" },
-            yaxis: { title: "Percentage (%)" }
+            yaxis: { title: "Percentage (%)" },
+            height: 400
         });
+
+        function changeTitle() {
+            let newTitle = prompt("Enter new assessment name:", "Scientific Writing (SEP6 & SEP7) - Game: Energy");
+            if (newTitle) {
+                document.getElementById("assessment-title").innerText = newTitle;
+            }
+        }
     </script>
-    
-    <table id="dataTable">
-        <thead>
-            <tr>
-                <th onclick="sortTable(0)">Teacher</th>
-                <th onclick="sortTable(1)">% Proficient</th>
-                <th onclick="sortTable(2)">4</th>
-                <th onclick="sortTable(3)">3</th>
-                <th onclick="sortTable(4)">2</th>
-                <th onclick="sortTable(5)">1</th>
-                <th onclick="sortTable(6)">N</th>
-                <th onclick="sortTable(7)">M</th>
-                <th onclick="sortTable(8)">Total Students</th>
-            </tr>
-        </thead>
-        <tbody>
-            <script>
-                let tableBody = "";
-                data.forEach(row => {
-                    tableBody += `<tr>${row.map(cell => `<td>${cell}</td>`).join('')}</tr>`;
-                });
-                document.write(tableBody);
-            </script>
-        </tbody>
-    </table>
 </body>
 </html>
+
 
