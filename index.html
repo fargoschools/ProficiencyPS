@@ -24,6 +24,47 @@
 </head>
 <body>
     <h2>Scientific Writing (SEP6 & SEP7) - Game: Energy</h2>
+    
+    <div id="summaryChart"></div>
+    
+    <script>
+        const data = [
+            ["Olson", 42.86, 0, 18, 17, 6, 1, 0, 42],
+            ["Potter", 43.59, 0, 17, 17, 4, 1, 0, 39],
+            ["Finley", 68.60, 0, 59, 13, 10, 4, 0, 86],
+            ["Christenson", 61.76, 1, 20, 10, 2, 1, 0, 34],
+            ["Walsh", 78.48, 2, 60, 12, 5, 0, 0, 79],
+            ["Thomas", 68.18, 0, 15, 2, 5, 0, 0, 22],
+            ["Triechel", 58.23, 0, 46, 23, 9, 1, 0, 79],
+            ["Carney", 75.00, 0, 18, 4, 1, 1, 0, 24],
+            ["Langlie", 86.96, 0, 80, 12, 0, 0, 0, 92],
+            ["Johnson", 63.89, 1, 22, 11, 1, 1, 0, 36],
+            ["Stuber", 68.18, 0, 30, 10, 3, 1, 0, 44]
+        ];
+        
+        let totals = [0, 0, 0, 0, 0, 0];
+        let totalStudents = 0;
+        data.forEach(row => {
+            for (let i = 2; i <= 7; i++) {
+                totals[i - 2] += row[i];
+            }
+            totalStudents += row[8];
+        });
+        
+        let percentages = totals.map(count => (count / totalStudents * 100).toFixed(2));
+        
+        Plotly.newPlot("summaryChart", [{
+            x: ["4s", "3s", "2s", "1s", "Ns", "Ms"],
+            y: percentages,
+            type: "bar",
+            marker: {color: "red"}
+        }], {
+            title: "Total Percentage Distribution of Scores",
+            xaxis: { title: "Score Category" },
+            yaxis: { title: "Percentage (%)" }
+        });
+    </script>
+    
     <table id="dataTable">
         <thead>
             <tr>
@@ -40,20 +81,6 @@
         </thead>
         <tbody>
             <script>
-                const data = [
-                    ["Olson", 42.86, 0, 18, 17, 6, 1, 0, 42],
-                    ["Potter", 43.59, 0, 17, 17, 4, 1, 0, 39],
-                    ["Finley", 68.60, 0, 59, 13, 10, 4, 0, 86],
-                    ["Christenson", 61.76, 1, 20, 10, 2, 1, 0, 34],
-                    ["Walsh", 78.48, 2, 60, 12, 5, 0, 0, 79],
-                    ["Thomas", 68.18, 0, 15, 2, 5, 0, 0, 22],
-                    ["Triechel", 58.23, 0, 46, 23, 9, 1, 0, 79],
-                    ["Carney", 75.00, 0, 18, 4, 1, 1, 0, 24],
-                    ["Langlie", 86.96, 0, 80, 12, 0, 0, 0, 92],
-                    ["Johnson", 63.89, 1, 22, 11, 1, 1, 0, 36],
-                    ["Stuber", 68.18, 0, 30, 10, 3, 1, 0, 44]
-                ];
-                
                 let tableBody = "";
                 data.forEach(row => {
                     tableBody += `<tr>${row.map(cell => `<td>${cell}</td>`).join('')}</tr>`;
@@ -62,35 +89,6 @@
             </script>
         </tbody>
     </table>
-
-    <div id="chart"></div>
-
-    <script>
-        function sortTable(n) {
-            let table = document.getElementById("dataTable");
-            let rows = Array.from(table.rows).slice(1);
-            let sortedRows = rows.sort((a, b) => {
-                let x = a.cells[n].innerText;
-                let y = b.cells[n].innerText;
-                return isNaN(x - y) ? x.localeCompare(y) : x - y;
-            });
-            table.tBodies[0].append(...sortedRows);
-        }
-
-        let teachers = data.map(row => row[0]);
-        let proficiencies = data.map(row => row[1]);
-        
-        Plotly.newPlot("chart", [{
-            x: teachers,
-            y: proficiencies,
-            type: "bar",
-            marker: {color: "blue"}
-        }], {
-            title: "% Proficient by Teacher",
-            xaxis: { title: "Teacher" },
-            yaxis: { title: "% Proficient" }
-        });
-    </script>
 </body>
 </html>
 
